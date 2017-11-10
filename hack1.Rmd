@@ -1,0 +1,147 @@
+---
+title: "Hackaton"
+author: "Soumya Raj Kumari"
+date: "10 November 2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Reading the file
+```{r}
+hd<-read.csv(file = "Model_Data.csv",header = T)
+library(dplyr)
+library(knitr)
+library(tree)
+library(e1071)
+library(class)
+```
+2. Define your data exploration, imputation and visualization approach <br>
+  => Cleaning process is done in excel<br>
+  - In the feature workclass,the value '?' is replaced with 'other'<br>
+  - In the feature occupation, the value '?' is replaced with 'other'<br>
+  - In the feature native_country, the value '?' is replaced with 'other'<br>
+  - In the feature com_level,the '<50=k.' & '>50k.'is replaced with '<50=k' & '>50k'<br>
+  - In the feature native_country, we can have atmost 32 levels wherein we have 42 levels.<br>
+    So we combined :<br>
+    combodia+china+hong+India+japan+loas+philippines+taiwan+thailand+vietnam-->ASIA<br>
+    canada+mexico+outlying-us+us-->USA<br>
+    england+Ireland+scotland -->UK<br>
+    france+germany+Greece+hol-ner+hungry+italy+poland+portugal+yugoslavia-->EUROPE<br>
+ 
+```{r}
+cat("number of rows\n")
+cat(nrow(hd))
+cat("\nnumber of columns\n")
+cat(ncol(hd))
+summary(hd)
+```
+
+
+Splitting the data
+```{r}
+set.seed(2)
+sample=sample.int(n=nrow(hd),size = floor(0.8*nrow(hd)),replace=F)
+hd_train=hd[sample,]
+hd_test=hd[-sample,]
+```
+
+
+Using Decision Tree algorithm 
+```{r}
+#creating decision tree
+hd.model1<-tree(com_level~.,data=hd_train)
+plot(hd.model1)
+text(hd.model1)
+
+#prediction
+model1_pre<-predict(hd.model1,hd_test)
+
+#confusion matrix
+
+maxidx1=function(arr){
+  return(which(arr==max(arr)))}
+
+idx1=apply(model1_pre,c(1),maxidx1)
+modelpre1=c('<=50k','>50k')[idx1]
+
+confmat1=table(modelpre1,hd_test$com_level)
+confmat1
+accuracy1=sum(diag(confmat1)/sum(confmat1))
+cat("ACCURACY FOR MODEL1-DECISION TREE:",round(accuracy1*100,2))
+
+```
+
+Using KNN algorithm
+```{r}
+hd1<-read.csv(file = "Model_Data.csv",header = T)
+for(i in 1:15){
+  hd1[[i]]<-as.numeric(hd1[[i]])
+}
+#train and test data
+hd_train1<-hd1[1:30718,1:14]
+hd_test1<-hd1[30719:38398,1:14]
+
+#train and test label data
+hd_train_label<-hd[1:30718,15]
+hd_test_label<-hd[30719:38398,15]
+
+#for(i in 1:14){
+
+#hd_pred_label= knn(train=hd_train1,test=hd_test1,cl=hd_train_label,i)
+
+#confmat2=table(hd_test_label,hd_pred_label)
+
+#accuracy2= sum(diag(confmat2))/sum(confmat2)
+#cat("\n","k=",i,"accuracy=",accuracy2)
+#}
+
+hd_pred_label= knn(train=hd_train1,test=hd_test1,cl=hd_train_label,3)
+confmat2=table(hd_test_label,hd_pred_label)
+accuracy2= sum(diag(confmat2))/sum(confmat2)
+cat("ACCURACY FOR MODEL2-KNN:",round(accuracy2*100,2))
+
+```
+
+Using Navie Bayes algorithm
+```{r}
+
+model3=naiveBayes(com_level~.,data=hd_train)
+model3
+pred3=predict(model3,hd_test[,-15])
+confmat3=table(pred3,hd_test$com_level)
+confmat3
+accuracy3=sum(diag(confmat3))/sum(confmat3)
+cat("ACCURACY FOR MODEL3:",round(accuracy3*100,2))
+```
+
+6. Build 3 Models, each using one of different type of algorithm. Send me the model building command.<br>
+=> model1:<br>
+   hd.model1<-tree(com_level~.,data=hd_train)<br>
+   <br>
+   model2:<br>
+   hd_pred_label= knn(train=hd_train1,test=hd_test1,cl=hd_train_label,3)<br>
+   <br>
+   model3:<br>
+   model3=naiveBayes(com_level~.,data=hd_train)<br>
+   <br>
+   When different groups of features are selected the accuracy rate is 82% and below whereas when     all features are included the accuracy rate is 84%<br>
+   <br>
+   
+7. Predict your model performance on each of the 3 models and submit<br>
+=>
+  ACCURACY FOR MODEL1-DECISION TREE: 84.92<br>
+  ACCURACY FOR MODEL2-KNN: 75.83<br>
+  ACCURACY FOR MODEL3: 82.38<br>
+  <br>
+
+8. Generalization<br>
+=> The maximum accuracy rate is 84% and minimum accuracy rate is 76% considering the three models which is between underfitting and overfitting so this can be considered as good fit.
+
+9. Upload details into your account on GIT Hub
+
+   
