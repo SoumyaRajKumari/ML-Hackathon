@@ -20,8 +20,7 @@ library(tree)
 library(e1071)
 library(class)
 ```
-
-  => Cleaning process is done in excel<br>
+ Cleaning process is done in excel<br>
   - In the feature workclass,the value '?' is replaced with 'other'<br>
   - In the feature occupation, the value '?' is replaced with 'other'<br>
   - In the feature native_country, the value '?' is replaced with 'other'<br>
@@ -41,7 +40,6 @@ cat(ncol(hd))
 summary(hd)
 ```
 
-
 Splitting the data
 ```{r}
 set.seed(2)
@@ -49,7 +47,6 @@ sample=sample.int(n=nrow(hd),size = floor(0.8*nrow(hd)),replace=F)
 hd_train=hd[sample,]
 hd_test=hd[-sample,]
 ```
-
 
 Using Decision Tree algorithm 
 ```{r}
@@ -73,7 +70,6 @@ confmat1=table(modelpre1,hd_test$com_level)
 confmat1
 accuracy1=sum(diag(confmat1)/sum(confmat1))
 cat("ACCURACY FOR MODEL1-DECISION TREE:",round(accuracy1*100,2))
-
 ```
 
 Using KNN algorithm
@@ -104,7 +100,6 @@ hd_pred_label= knn(train=hd_train1,test=hd_test1,cl=hd_train_label,3)
 confmat2=table(hd_test_label,hd_pred_label)
 accuracy2= sum(diag(confmat2))/sum(confmat2)
 cat("ACCURACY FOR MODEL2-KNN:",round(accuracy2*100,2))
-
 ```
 
 Using Navie Bayes algorithm
@@ -118,7 +113,6 @@ confmat3
 accuracy3=sum(diag(confmat3))/sum(confmat3)
 cat("ACCURACY FOR MODEL3:",round(accuracy3*100,2))
 ```
-
 
   ACCURACY FOR MODEL1-DECISION TREE: 84.92<br>
   ACCURACY FOR MODEL2-KNN: 75.83<br>
