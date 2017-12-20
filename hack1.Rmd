@@ -139,9 +139,8 @@ cat("ACCURACY FOR MODEL3:",round(accuracy3*100,2))
   ACCURACY FOR MODEL3: 82.38<br>
   <br>
 
-8. Generalization<br>
-=> The maximum accuracy rate is 84% and minimum accuracy rate is 76% considering the three models which is between underfitting and overfitting so this can be considered as good fit.
 
-9. Upload details into your account on GIT Hub
+
+
 
    
