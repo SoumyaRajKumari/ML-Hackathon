@@ -20,7 +20,7 @@ library(tree)
 library(e1071)
 library(class)
 ```
-2. Define your data exploration, imputation and visualization approach <br>
+
   => Cleaning process is done in excel<br>
   - In the feature workclass,the value '?' is replaced with 'other'<br>
   - In the feature occupation, the value '?' is replaced with 'other'<br>
@@ -119,21 +119,7 @@ accuracy3=sum(diag(confmat3))/sum(confmat3)
 cat("ACCURACY FOR MODEL3:",round(accuracy3*100,2))
 ```
 
-6. Build 3 Models, each using one of different type of algorithm. Send me the model building command.<br>
-=> model1:<br>
-   hd.model1<-tree(com_level~.,data=hd_train)<br>
-   <br>
-   model2:<br>
-   hd_pred_label= knn(train=hd_train1,test=hd_test1,cl=hd_train_label,3)<br>
-   <br>
-   model3:<br>
-   model3=naiveBayes(com_level~.,data=hd_train)<br>
-   <br>
-   When different groups of features are selected the accuracy rate is 82% and below whereas when     all features are included the accuracy rate is 84%<br>
-   <br>
-   
-7. Predict your model performance on each of the 3 models and submit<br>
-=>
+
   ACCURACY FOR MODEL1-DECISION TREE: 84.92<br>
   ACCURACY FOR MODEL2-KNN: 75.83<br>
   ACCURACY FOR MODEL3: 82.38<br>
